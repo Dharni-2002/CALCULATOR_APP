@@ -1,0 +1,6 @@
+{
+    "apiUrl": "http://localhost:8000/evaluate/",
+    "appName": "myapp",
+    "version": "1.0.0"
+  }
+  

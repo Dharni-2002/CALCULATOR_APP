@@ -1,0 +1,53 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Calculator App</title>
+<link rel="stylesheet" href="{% static 'myapp/styles.css' %}"> <!-- Link to the external CSS file -->
+</head>
+<body>
+
+<div class="calculator">
+  <input type="text" class="input-field" id="expressionInput" placeholder="Enter expression (e.g., 2+2)">
+  <br>
+  <button class="button" onclick="evaluateExpression()">Evaluate</button>
+  <button class="button" onclick="clearInput()">Clear</button>
+  <br>
+  <input type="text" class="input-field" id="resultDisplay" readonly>
+</div>
+
+<script>
+  // JavaScript function to evaluate the expression using the Django backend
+  async function evaluateExpression() {
+    const expression = document.getElementById('expressionInput').value;
+
+    {% comment %} try { {% endcomment %}
+      const response = await fetch('/api/evaluate/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ expression: expression })
+      });
+
+      const data = await response.json();
+
+      if (data.result) {
+        document.getElementById('resultDisplay').value = data.result;
+      } else if (data.error) {
+        alert(`Error: ${data.error}`);
+      }
+    {% comment %} } catch (error) {
+      alert('An error occurred while evaluating the expression.');
+    } {% endcomment %}
+  }
+
+  function clearInput() {
+    document.getElementById('expressionInput').value = '';
+    document.getElementById('resultDisplay').value = '';
+  }
+</script>
+
+</body>
+</html>
